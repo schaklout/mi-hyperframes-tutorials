@@ -14,13 +14,13 @@ interface Props {
 const { id, code, language, start, duration, steps } = Astro.props;
 
 const highlighter = await createHighlighter({
-  themes: ['tokyo-night'],
+  themes: ['rose-pine'],
   langs: [language],
 });
 
 const html = highlighter.codeToHtml(code, {
   lang: language,
-  theme: 'tokyo-night'
+  theme: 'rose-pine'
 });
 ---
 
@@ -64,12 +64,13 @@ const html = highlighter.codeToHtml(code, {
   .code-scene {
     width: 100%;
     height: 100%;
-    background: #0a0c10;
+    background: #0d0d0d;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
+    perspective: 1500px;
   }
 
   .bg-layer {
@@ -78,42 +79,50 @@ const html = highlighter.codeToHtml(code, {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 50% 50%, #1a1b26 0%, #0a0c10 100%);
-    opacity: 0.8;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(244, 114, 182, 0.15) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.1) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0d0d0d 100%);
+    opacity: 1;
     z-index: 0;
   }
 
   .editor-window {
     width: 1100px;
-    background: #1a1b26;
-    border-radius: 20px;
-    box-shadow: 0 80px 160px rgba(0,0,0,0.8);
-    border: 1px solid rgba(41, 46, 66, 0.8);
+    background: rgba(26, 26, 26, 0.9);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 
+      -20px 40px 80px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(244, 114, 182, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 2;
     overflow: hidden;
+    transform: rotateY(-12deg) rotateX(4deg) translateZ(50px);
+    transform-style: preserve-3d;
   }
 
   .editor-header {
-    background: #16161e;
+    background: rgba(30, 30, 30, 0.8);
     padding: 22px 30px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #292e42;
+    border-bottom: 1px solid rgba(244, 114, 182, 0.15);
   }
 
   .dots { display: flex; gap: 12px; }
   .dots span {
     width: 14px; height: 14px; border-radius: 50%;
   }
-  .dots span:nth-child(1) { background: #ff5f56; box-shadow: 0 0 10px rgba(255, 95, 86, 0.3); }
-  .dots span:nth-child(2) { background: #ffbd2e; box-shadow: 0 0 10px rgba(255, 189, 46, 0.3); }
-  .dots span:nth-child(3) { background: #27c93f; box-shadow: 0 0 10px rgba(39, 201, 63, 0.3); }
+  .dots span:nth-child(1) { background: #f472b6; box-shadow: 0 0 15px rgba(244, 114, 182, 0.4); }
+  .dots span:nth-child(2) { background: #fbbf24; box-shadow: 0 0 15px rgba(251, 191, 36, 0.4); }
+  .dots span:nth-child(3) { background: rgba(255, 255, 255, 0.2); }
 
   .filename {
     margin-left: 28px;
     font-family: 'Inter', sans-serif;
-    color: #7982a9;
+    color: #a1a1aa;
     font-size: 16px;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -125,6 +134,7 @@ const html = highlighter.codeToHtml(code, {
     font-size: 36px;
     line-height: 1.6;
     font-variant-ligatures: contextual;
+    transform: translateZ(30px);
   }
 
   .code-content pre {
@@ -150,21 +160,23 @@ const html = highlighter.codeToHtml(code, {
   }
 
   .callout-content {
-    background: rgba(36, 40, 59, 0.95);
-    backdrop-filter: blur(12px);
+    background: rgba(25, 25, 25, 0.85);
+    backdrop-filter: blur(16px);
     padding: 35px;
     border-radius: 28px;
-    border: 1px solid rgba(65, 72, 104, 0.8);
-    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    box-shadow: 
+      0 30px 60px rgba(0,0,0,0.5),
+      0 0 20px rgba(251, 191, 36, 0.1);
     position: relative;
   }
 
   .callout-content p {
     font-family: 'Inter', sans-serif;
-    color: #e0e0e0;
+    color: #fde68a;
     font-size: 24px;
     line-height: 1.5;
-    font-weight: 400;
+    font-weight: 500;
   }
 
   .callout-pointer {
@@ -173,7 +185,7 @@ const html = highlighter.codeToHtml(code, {
     top: 50%;
     width: 50px;
     height: 2px;
-    background: linear-gradient(to right, transparent, rgba(65, 72, 104, 0.8));
+    background: linear-gradient(to right, transparent, rgba(251, 191, 36, 0.6));
   }
 
   .code-content span {
