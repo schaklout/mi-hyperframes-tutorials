@@ -1,0 +1,25 @@
+{
+  "config": {
+    "title": "Mastering Async/Await",
+    "language": "javascript",
+    "theme": "tokyo-night"
+  },
+  "code": "async function fetchData(url) {\n  const response = await fetch(url);\n  const data = await response.json();\n  return data;\n}",
+  "steps": [
+    {
+      "line": 1,
+      "explanation": "Define an async function to handle asynchronous operations.",
+      "duration": 4
+    },
+    {
+      "line": 2,
+      "explanation": "The 'await' keyword pauses execution until the promise resolves.",
+      "duration": 5
+    },
+    {
+      "line": 3,
+      "explanation": "We parse the response as JSON. Note that .json() is also asynchronous!",
+      "duration": 5
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "mi-hyperframes-tutorials",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A Video-as-Code engine for generating high-end code tutorials using Astro and HyperFrames.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "hf:dev": "npm run build && hyperframes preview dist",
+    "hf:check": "npm run build && hyperframes lint dist",
+    "hf:render": "npm run build && hyperframes render dist",
+    "hf:publish": "npm run build && hyperframes publish dist"
+  },
+  "dependencies": {
+    "astro": "^6.2.1",
+    "gsap": "^3.12.5",
+    "hyperframes": "^0.4.41",
+    "shiki": "^2.3.2"
+  }
+}

@@ -1,0 +1,81 @@
+---
+import VideoLayout from '../layouts/VideoLayout.astro';
+import CodeScene from '../scenes/CodeScene.astro';
+import tutorialData from '../../data/tutorial.json';
+import type { TutorialData } from '../utils/types';
+
+const tutorial = tutorialData as TutorialData;
+
+// Dynamic duration calculation: 
+// Initial delay (5s) + Sum of all step durations + final buffer (3s)
+const totalStepsDuration = tutorial.steps.reduce((acc, step) => acc + step.duration, 0);
+const SCENE_DURATION = 5 + totalStepsDuration + 3;
+---
+
+<VideoLayout title={tutorial.config.title} duration={SCENE_DURATION}>
+  <CodeScene 
+    id="main-tutorial"
+    code={tutorial.code}
+    language={tutorial.config.language}
+    start={0}
+    duration={SCENE_DURATION}
+    steps={tutorial.steps}
+  />
+
+  <div id="tutorial-data" data-steps={JSON.stringify(tutorial.steps)}></div>
+
+  <script is:inline>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+
+    // 1. Initial State
+    tl.from(".editor-window", { y: 100, scale: 0.95, opacity: 0, duration: 1.5, ease: "expo.out" }, 0.5);
+
+    // 2. Typing Effect
+    const tokens = document.querySelectorAll('.code-content span');
+    tl.from(tokens, { 
+      opacity: 0, 
+      duration: 0.05, 
+      stagger: 0.01,
+      ease: "none"
+    }, 1.2);
+
+    // 3. Dynamic Callouts Logic
+    const stepsData = JSON.parse(document.getElementById('tutorial-data').getAttribute('data-steps'));
+    const lines = document.querySelectorAll('.shiki .line');
+    const editorWindow = document.querySelector('.editor-window');
+
+    let currentTime = 5; // Start showing callouts after typing begins to stabilize
+
+    stepsData.forEach((step, i) => {
+      const calloutId = `#callout-${i}`;
+      const lineIndex = step.line - 1;
+      const targetLine = lines[lineIndex];
+      const stepDuration = step.duration;
+      
+      if (targetLine) {
+        // Position setup
+        tl.set(calloutId, { 
+          y: () => {
+            const editorTop = editorWindow.offsetTop;
+            const contentPadding = 50; 
+            const lineTop = targetLine.offsetTop;
+            return editorTop + contentPadding + lineTop - 40;
+          }
+        }, 0);
+        
+        // In
+        tl.to(calloutId, { opacity: 1, x: -60, duration: 0.8, ease: "back.out(1.2)" }, currentTime);
+        tl.to(targetLine, { backgroundColor: "rgba(187, 154, 247, 0.2)", duration: 0.4 }, currentTime);
+        
+        // Out
+        tl.to(calloutId, { opacity: 0, x: 40, duration: 0.5, ease: "power2.in" }, currentTime + stepDuration - 0.5);
+        tl.to(targetLine, { backgroundColor: "transparent", duration: 0.4 }, currentTime + stepDuration - 0.5);
+
+        currentTime += stepDuration;
+      }
+    });
+
+    window.__timelines["main"] = tl;
+  </script>
+</VideoLayout>
